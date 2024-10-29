@@ -1,46 +1,32 @@
-## 文档说明
+## Documentation Overview
 
-LuaPanda的文档全部集中在这个目录下，根据类型分为
+All LuaPanda documentation is organized within this directory and categorized by type:
 
-+ 使用介绍
++ **User Guide**
 
-  放在`Manual`目录下
+  Located in the `Manual` directory.
 
-  [项目介绍](./Manual/feature-introduction.md)
-  
-  [快速试用指引](./Manual/quick-use.md)
+  - [Project Overview](./Manual/feature-introduction.md)
+  - [Quick Start Guide](./Manual/quick-use.md)
+  - [Debugger Integration Guide](./Manual/access-guidelines.md)
+  - [launch.json Configuration Overview](./Manual/launch-json-introduction.md)
+  - [Lua Native Symbol Awareness](./Manual/lua-intellisense.md)
+  - [On-Device Debugging](./Manual/debug-on-phone.md)
+  - [Additional Debugging Features](./Manual/common-functions.md)
+  - [Upgrade Notes](./Manual/update.md)
+  - [FAQ](./Manual/FAQ.md)
 
-  [调试器接入指引](./Manual/access-guidelines.md)
++ **Debugger Development**
 
-	[launch.json 配置项介绍](./Manual/launch-json-introduction.md) 
+  Located in the `Development` directory.
 
-	[Lua 原生符号感知](./Manual/lua-intellisense.md) 
+  - [Project Description](./Development/project-description.md)
+  - [Development Guide](./Development/how-to-join.md)
 
-  [真机调试](./Manual/debug-on-phone.md) 
++ **Principles and Concepts**
 
-  [其他调试能力](./Manual/common-functions.md) 
-  
-  [升级说明](./Manual/update.md) 
-  
-  [FAQ](./Manual/FAQ.md)
+  Located in the `Principle` directory.
 
-  
+  - [Implementation of Key Features](./Principle/debugger-principle.md)
 
-+ 调试器开发相关
-
-  放在`Development`目录下
-
-  [工程说明](./Development/project-description.md)
-
-  [开发指引](./Development/how-to-join.md)
-
-
-
-+ 原理介绍
-
-  放在`Principle`目录下
-
-	[一些特性的实现方案](./Principle/debugger-principle.md)
-
-`Res`中放一些静态图片资源，供各文档引用
-
+The `Res` directory contains static image resources referenced by various documentation files.
