@@ -1,136 +1,105 @@
-# 项目介绍
+# Project Introduction
 
-[TOC]
+## Table of Contents
 
-### lua 代码辅助
+### Lua Code Assistance
 
-经常使用VSCode做lua开发，所以花时间开发了lua代码辅助功能。
+The Lua code assistance feature in VSCode aims to streamline the development process. Key functionalities currently implemented include:
 
-目前实现的主要功能：
+- **Auto Completion**
+- **Snippet Completion**
+- **Definition Jump**
+- **Find Reference**
+- **Type Inference**
+- **Comment Generation**
+- **Linting**: Depends on [luacheck](https://github.com/mpeterv/luacheck)
+- **Formatting**: Depends on [lua-fmt](https://github.com/trixnz/lua-fmt)
 
-- 自动补全（auto completion）
-- 代码片段（snippet completion）
-- 定义跳转（definition）
-- 引用分析  (find reference)
-- 类型推断  (type inference)
-- 生成注释  (comment generation)
-- 代码诊断（linting）：依赖 [luacheck](https://github.com/mpeterv/luacheck)
-- 代码格式化  (formatting)  :  依赖 [lua-fmt](https://github.com/trixnz/lua-fmt)
+**Feature Demonstration: Code Suggestions and Definition Jump**
 
+![Code Suggestions and Definition Jump](../Res/feature-introduction/codeDefAndCompleting.gif)
 
+**Feature Demonstration: Comment Generation**
 
-​    功能展示: 代码提示和定义跳转
+![Comment Generation](../Res/feature-introduction/generateComments.gif)
 
-![](../Res/feature-introduction/codeDefAndCompleting.gif)
+### Notes for Using Code Suggestions
 
+1. Open a folder containing Lua files in VSCode, rather than individual Lua files.
+2. Ensure that the file extension is correctly associated with the Lua type; for example, if the Lua file has a `.txt` extension, it should be associated with Lua to activate the plugin.
 
+### Lua Code Debugging
 
-​    功能展示: 生成注释	
+The debugger is divided into two parts: the [VSCode extension] and the [debugger core] that runs within the Lua process. They communicate over TCP, which allows for real-device and remote debugging; thus, your project must include luasocket.
 
-​    ![](../Res/feature-introduction/generateComments.gif)	
+#### Debugger Architecture
 
-使用代码提示时注意两点，无需其他配置
+![Debugger Architecture](../Res/feature-introduction/debug-arch2.png)
 
-1. 使用 VScode 打开的包含lua文件的文件夹，而不是单个lua文件。
+*Image source: [Visual Studio Code API](https://code.visualstudio.com/api/extension-guides/debugger-extension)*
 
-2. VScode 文件后缀和类型关联正确，如果 lua 文件后缀是 txt 或者是 lua.txt 都要正确关联lua类型，插件才能生效。
+LuaPanda's debugger features a dual architecture of Lua and C, balancing the efficiency of C with the flexibility of Lua. The C extension library loads automatically based on the context, and users can continue debugging even if it fails to load.
 
-   
+### Debugging Use Cases
 
-### lua 代码调试
+- **Dynamic Distribution**: Avoids debugging issues after game packaging, suitable for post-release use.
+- **C Modules**: Ideal for efficient debugging during development.
 
-调试器总体分为两部分，分别是[VSCode 插件]和 运行于lua进程的[调试器主体]。二者建立网络连接通过 tcp 通信，支持真机/远程调试，所以需要用户项目中包含 luasocket。
+#### Debugging Interface in VSCode
 
-调试器总体架构可以参考下图。左侧的 VSCode 是 IDE ，中间的 Debug Adapter 表示调试器的 VSCode 插件，它和IDE通信遵循DAP协议。最右侧的 debugger 是调试器运行在 lua 中的部分，也就是 luapanda.lua文件，它捕获lua 运行状态，在触发命中断点等事件时，通知 Debug Adapter。
+![Debugging Interface](../Res/feature-introduction/debugui.png)
 
-![debug-arch2](../Res/feature-introduction/debug-arch2.png)
+## Features
 
-*图片来源 https://code.visualstudio.com/api/extension-guides/debugger-extension*
+### Multi-Platform Support
 
+- **Mac**: Console + Lua 5.1
+![Debug on Console](../Res/feature-introduction/debugon-console.png)
 
+- **Windows**: slua-unreal + Lua 5.3
+![Debug on SLua UE](../Res/feature-introduction/debugon-slua-ue.png)
 
-和其他调试器不同的是 : LuaPanda 的 debugger 部分使用了 lua + C 双架构。主体使用 lua 开发（可独立运行），另外有一个高性能的C扩展库，兼顾了C的高效以及lua的灵活性。C 扩展库会根据场景自动尝试加载，即使加载不了也不会影响调试，用户可以不关注。
+### Display Metatables and Upvalues
 
-lua 调试器适用的场景
+Shows the number of members in a table and the metatable, as well as upvalues in functions.
+![Show Metatable](../Res/feature-introduction/show-metatable.png)
 
-- 动态下发，避免游戏打包后无法调试的。适合发布后使用。
+### Expression Monitoring and Debug Console
 
-C 模块适合的场景
+Monitor expressions in the variable watch area.
 
-- 效率高，适合开发期调试。
+![Expression Monitoring](../Res/feature-introduction/REPL-watch.png)
 
-调试器的 IDE 使用VSCode，下面是调试界面。
+Use the debug console at breakpoints to input expressions, execute functions, or observe variable values.
 
-![debugui](../Res/feature-introduction/debugui.png)
+![Debug Console](../Res/feature-introduction/debug-console.png)
 
+### Attach Mode Support
 
+This mode allows for running the Lua project first and then attaching the debugger to it later.
 
-# 特性
+![Attach Mode](../Res/feature-introduction/attach_mode.GIF)
 
-### 多平台的支持
+### Conditional Breakpoints and Log Points
 
-Mac  console + lua 5.1
-![debugon-console](../Res/feature-introduction/debugon-console.png)
+Set regular breakpoints, conditional breakpoints, or log points by right-clicking in the line number area.
 
-Win  slua-unreal + lua5.3
-![debugon-slua-ue](../Res/feature-introduction/debugon-slua-ue.png)
+![Add Condition Breakpoint](../Res/feature-introduction/add_condition_bk.png)
 
+For example, entering a condition like `a == 2` will evaluate the expression. The result of `nil` or `false` is treated as false, while others are true.
 
+Log points will print logs upon execution, with output shown in the `DebugConsole - OUTPUT - LuaPanda Debugger`.
 
-### 展示元表 和 upvalue
+![Log Output](../Res/feature-introduction/print_log.png)
 
-可以显示table的成员数目和元表，function的upvalue。
-![show-metatable](../Res/feature-introduction/show-metatable.png)
+### Variable Assignment
 
+Users can modify variable values at breakpoints or assign values through the debug console.
 
+![Set Variable Value](../Res/feature-introduction/set-var-value.gif)
 
-### 表达式监控 和 调试控制台
+### Single File Debugging
 
-在变量监控区可以输入并监控表达式
+Easily debug individual Lua files within your project.
 
-![REPL-watch](../Res/feature-introduction/REPL-watch.png)
-
-调试控制台，可以在断点处输入表达式，执行函数，或者输入变量名观察它的值
-
-![debug-console](../Res/feature-introduction/debug-console.png)
-
-
-
-### 支持attach模式
-
-通常的调试流程是先运行vscode端，再开始执行lua工程。
-attach模式支持先执行lua工程，在希望调试的时候运行调试器，建立连接，开始调试。
-
-![attach_mode](../Res/feature-introduction/attach_mode.GIF)
-
-
-
-### 条件断点和记录点
-
-在 VSCode 行号前点击鼠标右键可选择普通断点，条件断点和记录点。
-
-![add_condition_bk](../Res/feature-introduction/add_condition_bk.png)
-
-若用户输入的条件是 `a == 2` , 调试器会执行表达式，并获取执行结果。注意执行结果 nil 和 false 为假，其他都为真。
-
-记录点在被执行时会打印日志。日志输出在：`DebugConsole - OUTPUT - LuaPanda Debugger` 
-
-![print_log](../Res/feature-introduction/print_log.png)
-
-
-
-### 变量赋值
-
-断点处允许用户修改变量的值， 用户也可以通过调试控制台给变量赋值。
-
-![企业微信截图_84fc8535-8733-4b04-9518-64cee91b2439](../Res/feature-introduction/set-var-value.gif?raw=true)
-
-
-
-### 单文件调试
-
-使用单文件调试，可以在工程中很方便的调试单个lua文件。
-
-![debug-file](../Res/debug-file.GIF?raw=true)
-
-
+![Debug File](../Res/debug-file.GIF)
